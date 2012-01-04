@@ -216,14 +216,14 @@ test("Get results from database", function(){
   resp = db.find('sqlite_master', 1);
 
   callback = function(){
-    if (resp.get('status') === SCLocalStorage.READY) {
-      resp.removeObserver('status', callback);
-      equals(resp.get('status'), SCLocalStorage.READY);
+    if (resp.get('ready')) {
+      resp.removeObserver('ready', callback);
+      equals(resp.get('ready'), true);
       ok(resp.length() > 0, "should have items");
       ok(resp.objectAt(0), "should have a first object");
     }
     start();
   };
-  resp.addObserver('status', callback);
+  resp.addObserver('ready', callback);
   callback(); // Double check in case we missed it
 })

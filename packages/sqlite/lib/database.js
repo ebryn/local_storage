@@ -6,10 +6,7 @@
 
 /*globals SCLocalStorage */
 
-var SCLocalStorage = window.SCLocalStorage = {
-  READY: 1,
-  EMPTY: 0
-};
+var SCLocalStorage = window.SCLocalStorage = {};
 
 /** 
   @class
@@ -346,10 +343,10 @@ SCLocalStorage.RecordArray = Ember.Object.extend(Ember.Enumerable, Ember.Array, 
 
   _rawResultsDidChange: Ember.observer(function(){
     var rawResults = this.get('rawResults');
-    this.set('status', SCLocalStorage.READY);
+    this.set('ready', true);
   }, 'rawResults'),
 
-  status: SCLocalStorage.EMPTY,
+  ready: false,
 
   length: function(){
     var rawResults = this.get('rawResults');
