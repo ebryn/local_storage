@@ -207,9 +207,11 @@ module("SCLocalStorage.RecordArray", {
 });
 
 test("Get results from database", function(){
+  expect(3);
+
   var resp, callback;
 
-  stop(1000);
+  stop();
 
   resp = db.find('sqlite_master', 1);
 
@@ -219,8 +221,8 @@ test("Get results from database", function(){
       equals(resp.get('status'), SCLocalStorage.READY);
       ok(resp.length() > 0, "should have items");
       ok(resp.objectAt(0), "should have a first object");
-      start();
     }
+    start();
   };
   resp.addObserver('status', callback);
   callback(); // Double check in case we missed it
