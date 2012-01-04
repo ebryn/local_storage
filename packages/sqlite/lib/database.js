@@ -167,7 +167,7 @@ SCLocalStorage.SQLiteDatabase = Ember.Object.extend(
   find: function(table, where) {
     var sql, sqlValues = [], whereSql, key;
 
-    if (Ember.typeOf(where) === 'hash') {
+    if (Ember.typeOf(where) === 'object') {
       var whereParts = [];
       for (key in where) {
         whereParts.push(key+'=?')
@@ -206,7 +206,7 @@ SCLocalStorage.SQLiteDatabase = Ember.Object.extend(
   insert: function(table, values) {
     var fieldsSql = '', sqlValues = [], sql, placeholders;
 
-    if (Ember.typeOf(values) === 'hash') {
+    if (Ember.typeOf(values) === 'object') {
       var fields = [], field;
       for(field in values) {
         fields.push(field);
@@ -250,7 +250,7 @@ SCLocalStorage.SQLiteDatabase = Ember.Object.extend(
   update: function(table, changes, where) {
     var sql, sqlValues = [], updateSql, whereSql, key;
 
-    if (Ember.typeOf(changes) === 'hash') {
+    if (Ember.typeOf(changes) === 'object') {
       var updateParts = [];
       for (key in changes) {
         updateParts.push(key+'=?');
@@ -264,7 +264,7 @@ SCLocalStorage.SQLiteDatabase = Ember.Object.extend(
       updateSql = changes;
     }
 
-    if (Ember.typeOf(where) === 'hash') {
+    if (Ember.typeOf(where) === 'object') {
       var whereParts = [];
       for (key in where) {
         whereParts.push(key+'=?')
@@ -301,7 +301,7 @@ SCLocalStorage.SQLiteDatabase = Ember.Object.extend(
   destroy: function(table, where) {
     var sql, sqlValues = [], whereSql, key;
 
-    if (Ember.typeOf(where) === 'hash') {
+    if (Ember.typeOf(where) === 'object') {
       var whereParts = [];
       for (key in where) {
         whereParts.push(key+'=?')
