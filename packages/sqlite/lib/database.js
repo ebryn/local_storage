@@ -4,10 +4,6 @@
 // License:   Licensed under MIT license (see license.js)
 // ==========================================================================
 
-/*globals SCLocalStorage */
-
-var SCLocalStorage = window.SCLocalStorage = {};
-
 /** 
   @class
 
@@ -15,8 +11,8 @@ var SCLocalStorage = window.SCLocalStorage = {};
 
   @extends Ember.Object
 */
-SCLocalStorage.SQLiteDatabase = Ember.Object.extend(
-/** @scope SCLocalStorage.SQLiteDatabase.prototype */ {
+var SQLiteDatabase = window.SQLiteDatabase = Ember.Object.extend(
+/** @scope SQLiteDatabase.prototype */ {
 
   /**
     Name of the database.
@@ -185,7 +181,7 @@ SCLocalStorage.SQLiteDatabase = Ember.Object.extend(
     if(!Ember.empty(whereSql)) sql += ' WHERE '+whereSql;
     sql += ';';
 
-    var ret = SCLocalStorage.RecordArray.create();
+    var ret = SQLiteDatabase.RecordArray.create();
 
     this.transaction([[sql, sqlValues]], { queryData: function(t, results){ ret.set('rawResults', results); } });
 
@@ -334,10 +330,10 @@ SCLocalStorage.SQLiteDatabase = Ember.Object.extend(
 });
 
 
-SCLocalStorage.SQLiteDatabase.isSupported = !!window.openDatabase;
+SQLiteDatabase.isSupported = !!window.openDatabase;
 
 
-SCLocalStorage.RecordArray = Ember.Object.extend(Ember.Enumerable, Ember.Array, {
+SQLiteDatabase.RecordArray = Ember.Object.extend(Ember.Enumerable, Ember.Array, {
 
   rawResults: null,
 

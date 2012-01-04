@@ -1,5 +1,5 @@
 // ==========================================================================
-// SCLocalStorage.SQLiteDatabase Unit Test
+// SQLiteDatabase Unit Test
 // ==========================================================================
 /*globals SCLocalStorage */
 
@@ -9,7 +9,7 @@ function mockTransactions(){
   queries = [];
   transactionErrorCallbacks = [];
   transactionSuccessCallbacks = [];
-  db = SCLocalStorage.SQLiteDatabase.create({ name: 'TestDatabase' });
+  db = SQLiteDatabase.create({ name: 'TestDatabase' });
   db._db = {
     transaction: function(transaction, errorCallback, successCallback){
       transaction({
@@ -24,15 +24,15 @@ function mockTransactions(){
 };
 
 
-module("SCLocalStorage.SQLiteDatabase: Basic");
+module("SQLiteDatabase: Basic");
 
 test("generates default name", function(){
-  db = SCLocalStorage.SQLiteDatabase.create();
+  db = SQLiteDatabase.create();
   ok(db.get('name').match(/^db/), "should generate default name");
 });
 
 test("creates database with proper params", function(){
-  db = SCLocalStorage.SQLiteDatabase.create({
+  db = SQLiteDatabase.create({
     name: 'TestDatabase',
     size: 20000,
   });
@@ -42,7 +42,7 @@ test("creates database with proper params", function(){
 
 
 
-module("SCLocalStorage.SQLiteDatabase: Transaction", {
+module("SQLiteDatabase: Transaction", {
   setup: function(){
     mockTransactions();
     sampleQuery = "SELECT * FROM people;";
@@ -87,7 +87,7 @@ test("transaction callbacks", function(){
 
 
 
-module("SCLocalStorage.SQLiteDatabase: Create Table", {
+module("SQLiteDatabase: Create Table", {
   setup: function(){
     mockTransactions();
   }
@@ -101,7 +101,7 @@ test("create table", function(){
 
 
 
-module("SCLocalStorage.SQLiteDatabase: Find", {
+module("SQLiteDatabase: Find", {
   setup: function(){
     mockTransactions();
   }
@@ -126,7 +126,7 @@ test("find with hash", function(){
 
 
 
-module("SCLocalStorage.SQLiteDatabase: Insert", {
+module("SQLiteDatabase: Insert", {
   setup: function(){
     mockTransactions();
   }
@@ -148,7 +148,7 @@ test("insert with hash", function(){
 
 
 
-module("SCLocalStorage.SQLiteDatabase: Update", {
+module("SQLiteDatabase: Update", {
   setup: function(){
     mockTransactions();
   }
@@ -175,7 +175,7 @@ test("update with hashes", function(){
 
 
 
-module("SCLocalStorage.SQLiteDatabase: Destroy", {
+module("SQLiteDatabase: Destroy", {
   setup: function(){
     mockTransactions();
   }
@@ -200,9 +200,9 @@ test("destroy with hash", function(){
 
 
 
-module("SCLocalStorage.RecordArray", {
+module("SQLiteDatabase.RecordArray", {
   setup: function(){
-    db = SCLocalStorage.SQLiteDatabase.create({ name: 'TestDatabase' });
+    db = SQLiteDatabase.create({ name: 'TestDatabase' });
   }
 });
 
