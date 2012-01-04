@@ -6,7 +6,10 @@
 
 /*globals SCLocalStorage */
 
-var SCLocalStorage = window.SCLocalStorage = {};
+var SCLocalStorage = window.SCLocalStorage = {
+  READY: 1,
+  EMPTY: 0
+};
 
 /** 
   @class
