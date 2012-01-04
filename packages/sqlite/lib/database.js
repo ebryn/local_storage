@@ -37,11 +37,11 @@ SCLocalStorage.SQLiteDatabase = Ember.Object.extend(
     Optional version of database
     @property {String}
   */
-  version: function(key, value){
+  version: Ember.computed(function(key, value){
     if (!this._db) return null;
     if (value !== undefined) this._db.changeVersion(this._db.version, value, function(){}, function(){}, function(){});
     return this._db.version;
-  }.property(),
+  }).property(),
 
   /**
     The raw database object
@@ -88,7 +88,7 @@ SCLocalStorage.SQLiteDatabase = Ember.Object.extend(
   transaction: function(queries, callbacks) {
     if (!this._db) return;
 
-    if (Ember.typeOf(queries) !== Ember.T_ARRAY) queries = [queries];
+    if (Ember.typeOf(queries) !== 'array') queries = [queries];
 
     var length = queries.length, query, values, idx;
 
@@ -100,7 +100,7 @@ SCLocalStorage.SQLiteDatabase = Ember.Object.extend(
       }
     };
 
-    callbacks = Ember.extend({
+    callbacks = $.extend({
       success: function(){},
       error: defaultErrorHandler,
       queryData: function(){},
@@ -110,7 +110,7 @@ SCLocalStorage.SQLiteDatabase = Ember.Object.extend(
     this._db.transaction(function(t){
       for (idx=0; idx < length; idx++) {
         query = queries[idx];
-        if (Ember.typeOf(query) === Ember.T_ARRAY) {
+        if (Ember.typeOf(query) === 'array') {
           values = query[1];
           query = query[0];
         } else {
@@ -167,14 +167,14 @@ SCLocalStorage.SQLiteDatabase = Ember.Object.extend(
   find: function(table, where) {
     var sql, sqlValues = [], whereSql, key;
 
-    if (Ember.typeOf(where) === Ember.T_HASH) {
+    if (Ember.typeOf(where) === 'hash') {
       var whereParts = [];
       for (key in where) {
         whereParts.push(key+'=?')
         sqlValues.push(where[key]);
       }
       whereSql = whereParts.join(' AND ');
-    } else if (Ember.typeOf(where) === Ember.T_ARRAY){
+    } else if (Ember.typeOf(where) === 'array'){
       whereSql = where[0];
       sqlValues = where[1];
     } else {
@@ -206,7 +206,7 @@ SCLocalStorage.SQLiteDatabase = Ember.Object.extend(
   insert: function(table, values) {
     var fieldsSql = '', sqlValues = [], sql, placeholders;
 
-    if (Ember.typeOf(values) === Ember.T_HASH) {
+    if (Ember.typeOf(values) === 'hash') {
       var fields = [], field;
       for(field in values) {
         fields.push(field);
@@ -250,28 +250,28 @@ SCLocalStorage.SQLiteDatabase = Ember.Object.extend(
   update: function(table, changes, where) {
     var sql, sqlValues = [], updateSql, whereSql, key;
 
-    if (Ember.typeOf(changes) === Ember.T_HASH) {
+    if (Ember.typeOf(changes) === 'hash') {
       var updateParts = [];
       for (key in changes) {
         updateParts.push(key+'=?');
         sqlValues.push(changes[key]);
       }
       updateSql = updateParts.join(', ');
-    } else if (Ember.typeOf(changes) === Ember.T_ARRAY){
+    } else if (Ember.typeOf(changes) === 'array'){
       updateSql = changes[0];
       sqlValues = changes[1];
     } else {
       updateSql = changes;
     }
 
-    if (Ember.typeOf(where) === Ember.T_HASH) {
+    if (Ember.typeOf(where) === 'hash') {
       var whereParts = [];
       for (key in where) {
         whereParts.push(key+'=?')
         sqlValues.push(where[key]);
       }
       whereSql = whereParts.join(' AND ');
-    } else if (Ember.typeOf(where) === Ember.T_ARRAY){
+    } else if (Ember.typeOf(where) === 'array'){
       whereSql = where[0];
       sqlValues = sqlValues.concat(where[1]);
     } else {
@@ -301,14 +301,14 @@ SCLocalStorage.SQLiteDatabase = Ember.Object.extend(
   destroy: function(table, where) {
     var sql, sqlValues = [], whereSql, key;
 
-    if (Ember.typeOf(where) === Ember.T_HASH) {
+    if (Ember.typeOf(where) === 'hash') {
       var whereParts = [];
       for (key in where) {
         whereParts.push(key+'=?')
         sqlValues.push(where[key]);
       }
       whereSql = whereParts.join(' AND ');
-    } else if (Ember.typeOf(where) === Ember.T_ARRAY){
+    } else if (Ember.typeOf(where) === 'array'){
       whereSql = where[0];
       sqlValues = where[1];
     } else {
@@ -326,7 +326,7 @@ SCLocalStorage.SQLiteDatabase = Ember.Object.extend(
     @private
   */
   init: function(){
-    sc_super();
+    this._super();
     if (!this.name) this.name = 'db'+Ember.guidFor(this);
     this._openDatabase();
   }
@@ -341,17 +341,17 @@ SCLocalStorage.RecordArray = Ember.Object.extend(Ember.Enumerable, Ember.Array, 
 
   rawResults: null,
 
-  _rawResultsDidChange: function(){
+  _rawResultsDidChange: Ember.observer(function(){
     var rawResults = this.get('rawResults');
     this.set('status', SCLocalStorage.READY);
-  }.observes('rawResults'),
+  }, 'rawResults'),
 
   status: SCLocalStorage.EMPTY,
 
-  length: function(){
+  length: Ember.computed(function(){
     var rawResults = this.get('rawResults');
     return rawResults ? rawResults.rows.length : 0;
-  }.property('rawResults').cacheable(),
+  }).property('rawResults').cacheable(),
 
   objectAt: function(idx){
     var rawResults = this.get('rawResults'),
