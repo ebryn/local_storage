@@ -56,16 +56,16 @@ end
 
 # Create ember:package tasks for each of the Ember packages
 namespace :ember do
-  %w(data).each do |package|
+  %w(sqlite).each do |package|
     task package => compile_package_task("ember-#{package}", "ember-#{package}")
   end
 end
 
 # Create a build task that depends on all of the package dependencies
-task :build => ["ember:data"]
+task :build => ["ember:sqlite"]
 
 distributions = {
-  "ember-data" => ["ember-data"]
+  "ember-sqlite" => ["ember-sqlite"]
 }
 
 distributions.each do |name, libraries|
