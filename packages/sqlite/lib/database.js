@@ -6,14 +6,16 @@
 
 /*globals SCLocalStorage */
 
+var SCLocalStorage = window.SCLocalStorage = {};
+
 /** 
   @class
 
   Class for handling an SQLite database.
 
-  @extends SC.Object
+  @extends Ember.Object
 */
-SCLocalStorage.SQLiteDatabase = SC.Object.extend(
+SCLocalStorage.SQLiteDatabase = Ember.Object.extend(
 /** @scope SCLocalStorage.SQLiteDatabase.prototype */ {
 
   /**
@@ -86,7 +88,7 @@ SCLocalStorage.SQLiteDatabase = SC.Object.extend(
   transaction: function(queries, callbacks) {
     if (!this._db) return;
 
-    if (SC.typeOf(queries) !== SC.T_ARRAY) queries = [queries];
+    if (Ember.typeOf(queries) !== Ember.T_ARRAY) queries = [queries];
 
     var length = queries.length, query, values, idx;
 
@@ -98,7 +100,7 @@ SCLocalStorage.SQLiteDatabase = SC.Object.extend(
       }
     };
 
-    callbacks = SC.extend({
+    callbacks = Ember.extend({
       success: function(){},
       error: defaultErrorHandler,
       queryData: function(){},
@@ -108,7 +110,7 @@ SCLocalStorage.SQLiteDatabase = SC.Object.extend(
     this._db.transaction(function(t){
       for (idx=0; idx < length; idx++) {
         query = queries[idx];
-        if (SC.typeOf(query) === SC.T_ARRAY) {
+        if (Ember.typeOf(query) === Ember.T_ARRAY) {
           values = query[1];
           query = query[0];
         } else {
@@ -160,19 +162,19 @@ SCLocalStorage.SQLiteDatabase = SC.Object.extend(
 
     @param {String} table Name of table
     @param {String} where Where condition
-    @return {SC.Object} An object with results
+    @return {Ember.Object} An object with results
   */
   find: function(table, where) {
     var sql, sqlValues = [], whereSql, key;
 
-    if (SC.typeOf(where) === SC.T_HASH) {
+    if (Ember.typeOf(where) === Ember.T_HASH) {
       var whereParts = [];
       for (key in where) {
         whereParts.push(key+'=?')
         sqlValues.push(where[key]);
       }
       whereSql = whereParts.join(' AND ');
-    } else if (SC.typeOf(where) === SC.T_ARRAY){
+    } else if (Ember.typeOf(where) === Ember.T_ARRAY){
       whereSql = where[0];
       sqlValues = where[1];
     } else {
@@ -180,7 +182,7 @@ SCLocalStorage.SQLiteDatabase = SC.Object.extend(
     }
 
     sql = 'SELECT * FROM '+table;
-    if(!SC.empty(whereSql)) sql += ' WHERE '+whereSql;
+    if(!Ember.empty(whereSql)) sql += ' WHERE '+whereSql;
     sql += ';';
 
     var ret = SCLocalStorage.RecordArray.create();
@@ -204,7 +206,7 @@ SCLocalStorage.SQLiteDatabase = SC.Object.extend(
   insert: function(table, values) {
     var fieldsSql = '', sqlValues = [], sql, placeholders;
 
-    if (SC.typeOf(values) === SC.T_HASH) {
+    if (Ember.typeOf(values) === Ember.T_HASH) {
       var fields = [], field;
       for(field in values) {
         fields.push(field);
@@ -248,28 +250,28 @@ SCLocalStorage.SQLiteDatabase = SC.Object.extend(
   update: function(table, changes, where) {
     var sql, sqlValues = [], updateSql, whereSql, key;
 
-    if (SC.typeOf(changes) === SC.T_HASH) {
+    if (Ember.typeOf(changes) === Ember.T_HASH) {
       var updateParts = [];
       for (key in changes) {
         updateParts.push(key+'=?');
         sqlValues.push(changes[key]);
       }
       updateSql = updateParts.join(', ');
-    } else if (SC.typeOf(changes) === SC.T_ARRAY){
+    } else if (Ember.typeOf(changes) === Ember.T_ARRAY){
       updateSql = changes[0];
       sqlValues = changes[1];
     } else {
       updateSql = changes;
     }
 
-    if (SC.typeOf(where) === SC.T_HASH) {
+    if (Ember.typeOf(where) === Ember.T_HASH) {
       var whereParts = [];
       for (key in where) {
         whereParts.push(key+'=?')
         sqlValues.push(where[key]);
       }
       whereSql = whereParts.join(' AND ');
-    } else if (SC.typeOf(where) === SC.T_ARRAY){
+    } else if (Ember.typeOf(where) === Ember.T_ARRAY){
       whereSql = where[0];
       sqlValues = sqlValues.concat(where[1]);
     } else {
@@ -299,14 +301,14 @@ SCLocalStorage.SQLiteDatabase = SC.Object.extend(
   destroy: function(table, where) {
     var sql, sqlValues = [], whereSql, key;
 
-    if (SC.typeOf(where) === SC.T_HASH) {
+    if (Ember.typeOf(where) === Ember.T_HASH) {
       var whereParts = [];
       for (key in where) {
         whereParts.push(key+'=?')
         sqlValues.push(where[key]);
       }
       whereSql = whereParts.join(' AND ');
-    } else if (SC.typeOf(where) === SC.T_ARRAY){
+    } else if (Ember.typeOf(where) === Ember.T_ARRAY){
       whereSql = where[0];
       sqlValues = where[1];
     } else {
@@ -325,7 +327,7 @@ SCLocalStorage.SQLiteDatabase = SC.Object.extend(
   */
   init: function(){
     sc_super();
-    if (!this.name) this.name = 'db'+SC.guidFor(this);
+    if (!this.name) this.name = 'db'+Ember.guidFor(this);
     this._openDatabase();
   }
 
@@ -335,7 +337,7 @@ SCLocalStorage.SQLiteDatabase = SC.Object.extend(
 SCLocalStorage.SQLiteDatabase.isSupported = !!window.openDatabase;
 
 
-SCLocalStorage.RecordArray = SC.Object.extend(SC.Enumerable, SC.Array, {
+SCLocalStorage.RecordArray = Ember.Object.extend(Ember.Enumerable, Ember.Array, {
 
   rawResults: null,
 
