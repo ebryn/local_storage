@@ -351,14 +351,14 @@ SCLocalStorage.RecordArray = Ember.Object.extend(Ember.Enumerable, Ember.Array, 
 
   status: SCLocalStorage.EMPTY,
 
-  length: Ember.computed(function(){
+  length: function(){
     var rawResults = this.get('rawResults');
     return rawResults ? rawResults.rows.length : 0;
-  }).property('rawResults').cacheable(),
+  },
 
   objectAt: function(idx){
     var rawResults = this.get('rawResults'),
-        length = this.get('length');
+        length = this.length();
     return (idx < length) ? rawResults.rows.item(idx) : null;
   }
 
